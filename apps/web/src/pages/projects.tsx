@@ -2,10 +2,11 @@ import React, { useState, Suspense } from 'react';
 import { Modal } from '../components/modal';
 import { type Project } from '../features/projects/types';
 import { useProjectMutations } from '../features/projects/handlers/index';
-
+import { ProjectListSkeleton } from '../features/projects/components/projectListSkeleton';
 
 const delayRender = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const ProjectList = React.lazy(() => delayRender(3000).then(() => import('../features/projects/components/projectList')));
+
 
 const Projects = () => {
     const { createProject, editProject, deleteProject } = useProjectMutations();
@@ -79,7 +80,7 @@ const Projects = () => {
                 <div className="flex flex-row w-full justify-end items-end">
                     <button className="bg-blue-400 p-2 w-10 h-10 rounded-md hover:cursor-pointer hover:bg-blue-500" onClick={() => handleModalOpen(null, 'create')}>+</button>
                 </div>
-                <Suspense fallback={<div className="loader"></div>}>
+                <Suspense fallback={<ProjectListSkeleton />}>
                     <ProjectList handleModalOpen={handleModalOpen} />
                 </Suspense>
             </div>
